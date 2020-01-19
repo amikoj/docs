@@ -6,5 +6,18 @@
   },
   "docs-other": {
     "First Category": ["doc4", "doc5"]
+  },
+  "sanic": {
+    "起步": [
+      "python/sanic/installation",
+      "python/sanic/example",
+      "python/sanic/conf",
+      "python/sanic/log"
+    ],
+    "核心": [
+      "python/sanic/request",
+      "python/sanic/response",
+      "python/sanic/cookie"
+    ]
   }
 }
