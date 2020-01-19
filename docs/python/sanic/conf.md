@@ -2,6 +2,7 @@
 id: conf
 title: 参数配置
 sidebar_label: 参数配置
+author: 胖蔡
 ---
 
 任何相当复杂的应用程序都需要未包含在实际代码中的配置。对于不同的环境或安装，设置可能会有所不同。
@@ -75,7 +76,7 @@ app.config.from_envvar('MYAPP_SETTINGS')
 ```
 然后，可以在设置了MYAPP_SETTINGS环境变量的情况下运行您的应用程序：
 
-'''shell
+```shell
 #$ MYAPP_SETTINGS=/path/to/config_file python3 myapp.py
 #INFO: Goin' Fast @ http://0.0.0.0:8000
 ```

@@ -2,6 +2,7 @@
 id: log
 title: 日志
 sidebar_label: 日志
+author: 胖蔡
 ---
 
 Sanic允许您基于python3日志记录API对请求执行不同类型的日志记录（访问日志，错误日志）。如果要创建新配置，则应具有有关python3日志记录的一些基本知识。

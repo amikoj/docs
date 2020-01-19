@@ -2,6 +2,7 @@
 id: response
 title: 响应数据
 sidebar_label: 响应数据
+author:胖蔡
 ---
 
 使用sanic.response模块中的函数来创建响应。响应数据类型如下：

@@ -1,4 +1,429 @@
 ---
 id: router
 title: 路由
+author:胖蔡
 ---
+
+路由允许用户为不同的URL端点指定处理程序功能。
+
+基本路线如下所示，其中app是Sanic类的实例 ：
+
+```python
+from sanic.response import json
+
+@app.route("/")
+async def test(request):
+    return json({ "hello": "world" })
+
+```
+
+当访问URL http：//server.url/（服务器的基本URL）时，路由器将最后一个/与处理函数test匹配，然后返回JSON对象。
+
+Sanic处理程序函数必须使用async def语法定义，因为它们是异步函数。
+
+## 请求参数
+
+Sanic带有支持请求参数的基本路由器。
+
+要指定参数，请在其周围加上如下的引号：<PARAM>。请求参数将作为关键字参数传递给路由处理程序函数。
+
+
+```python
+from sanic.response import text
+
+@app.route('/tag/<tag>')
+async def tag_handler(request, tag):
+    return text('Tag - {}'.format(tag))
+```
+要为参数指定类型，请在参数名称后的引号内添加：type。如果参数与指定的类型不匹配，Sanic将抛出NotFound异常，从而导致URL上出现404：找不到页面错误。
+
+
+## 支持的类型
+
+- str
+ -- “Bob”
+
+ -- “Python 3”
+- int
+ -- 10
+
+ -- 20
+
+                                                                                                                                                                                                                                                                                                              -- 30
+
+-- -10
+
+- number
+
+-- 1
+
+-- 1.5
+
+-- 10
+
+-- -10
+- alpha
+
+-- “Bob”
+
+-- “Python”
+
+
+- path
+
+-- “hello”
+
+-- “hello.text”
+
+-- “hello world”
+
+- uuid
+
+-- 123a123a-a12a-1a1a-a1a1-1a12a1a12345 支持UUIDv4)
+
+- 正则表达式
+如果未设置任何类型，则应为字符串。赋予函数的参数将始终是字符串，与类型无关。
+
+```python
+from sanic.response import text
+
+@app.route('/string/<string_arg:string>')
+async def string_handler(request, string_arg):
+    return text('String - {}'.format(string_arg))
+
+@app.route('/int/<integer_arg:int>')
+async def integer_handler(request, integer_arg):
+    return text('Integer - {}'.format(integer_arg))
+
+@app.route('/number/<number_arg:number>')
+async def number_handler(request, number_arg):
+    return text('Number - {}'.format(number_arg))
+
+@app.route('/alpha/<alpha_arg:alpha>')
+async def number_handler(request, alpha_arg):
+    return text('Alpha - {}'.format(alpha_arg))
+
+@app.route('/path/<path_arg:path>')
+async def number_handler(request, path_arg):
+    return text('Path - {}'.format(path_arg))
+
+@app.route('/uuid/<uuid_arg:uuid>')
+async def number_handler(request, uuid_arg):
+    return text('Uuid - {}'.format(uuid_arg))
+
+@app.route('/person/<name:[A-z]+>')
+async def person_handler(request, name):
+    return text('Person - {}'.format(name))
+
+@app.route('/folder/<folder_id:[A-z0-9]{0,4}>')
+async def folder_handler(request, folder_id):
+    return text('Folder - {}'.format(folder_id))
+```
+
+> str不是有效的类型标记。如果要str识别，则必须使用字符串
+
+## HTTP请求类型
+
+默认情况下，URL上定义的路由仅可用于对该URL的GET请求。但是，@ app.route装饰器接受可选参数methods，该参数允许处理程序函数与列表中的任何HTTP方法一起使用。
+
+
+```python
+from sanic.response import text
+
+@app.route('/post', methods=['POST'])
+async def post_handler(request):
+    return text('POST request - {}'.format(request.json))
+
+@app.route('/get', methods=['GET'])
+async def get_handler(request):
+    return text('GET request - {}'.format(request.args))
+    
+
+```
+
+
+还有一个可选的host参数（可以是列表或字符串）。这限制了到提供的一个或多个主机的路由。如果还有一条没有主机的路由，它将是默认路由。
+
+```python
+@app.route('/get', methods=['GET'], host='example.com')
+async def get_handler(request):
+    return text('GET request - {}'.format(request.args))
+
+# if the host header doesn't match example.com, this route will be used
+@app.route('/get', methods=['GET'])
+async def get_handler(request):
+    return text('GET request in default - {}'.format(request.args))
+```
+
+还有速记方法修饰符：
+
+```python
+from sanic.response import text
+
+@app.post('/post')
+async def post_handler(request):
+    return text('POST request - {}'.format(request.json))
+
+@app.get('/get')
+async def get_handler(request):
+    return text('GET request - {}'.format(request.args))
+```
+
+
+## add_route 方法
+
+如我们所见，路由通常使用@ app.route装饰器指定。但是，此装饰器实际上只是app.add_route 方法的包装，其用法如下：
+
+```python
+from sanic.response import text
+
+# Define the handler functions
+async def handler1(request):
+    return text('OK')
+
+async def handler2(request, name):
+    return text('Folder - {}'.format(name))
+
+async def person_handler2(request, name):
+    return text('Person - {}'.format(name))
+
+# Add each handler function as a route
+app.add_route(handler1, '/test')
+app.add_route(handler2, '/folder/<name>')
+app.add_route(person_handler2, '/person/<name:[A-z]>', methods=['GET'])
+
+```
+
+## URL建议使用url_for
+Sanic提供了url_for方法，用于根据处理程序方法名称生成URL。如果您要避免将url路径硬编码到应用程序中，这将很有用；相反，您可以仅引用处理程序名称。例如：
+
+```python
+from sanic.response import redirect
+
+@app.route('/')
+async def index(request):
+    # generate a URL for the endpoint `post_handler`
+    url = app.url_for('post_handler', post_id=5)
+    # the URL is `/posts/5`, redirect to it
+    return redirect(url)
+
+@app.route('/posts/<post_id>')
+async def post_handler(request, post_id):
+    return text('Post - {}'.format(post_id))
+```
+
+使用url_for时要记住的其他事项：
+
+- 传递给url_for的不是请求参数的关键字参数将包含在URL的查询字符串中。例如：
+
+```python
+
+url = app.url_for('post_handler', post_id=5, arg_one='one', arg_two='two')
+# /posts/5?arg_one=one&arg_two=two
+```
+
+- 可以将多值参数传递给url_for。例如：
+
+```python
+
+url = app.url_for('post_handler', post_id=5, arg_one=['one', 'two'])
+# /posts/5?arg_one=one&arg_one=two
+```
+
+- 也有一些特殊的参数（_anchor，_external，_scheme，_method，_SERVER传给）url_for将有特殊的URL建设（_method不是现在支持，将被忽略）。例如：
+
+```python
+url = app.url_for('post_handler', post_id=5, arg_one='one', _anchor='anchor')
+# /posts/5?arg_one=one#anchor
+
+url = app.url_for('post_handler', post_id=5, arg_one='one', _external=True)
+# //server/posts/5?arg_one=one
+# _external requires you to pass an argument _server or set SERVER_NAME in app.config if not url will be same as no _external
+
+url = app.url_for('post_handler', post_id=5, arg_one='one', _scheme='http', _external=True)
+# http://server/posts/5?arg_one=one
+# when specifying _scheme, _external must be True
+
+# you can pass all special arguments at once
+url = app.url_for('post_handler', post_id=5, arg_one=['one', 'two'], arg_two=2, _anchor='anchor', _scheme='http', _external=True, _server='another_server:8888')
+# http://another_server:8888/posts/5?arg_one=one&arg_one=two&arg_two=2#anchor
+
+```
+
+- 必须将所有有效参数传递给url_for以构建URL。如果未提供参数，或者参数与指定的类型不匹配，则将引发URLBuildError。
+
+
+## WebSocket
+
+可以使用@ app.websocket 装饰器定义WebSocket协议的路由：
+
+```python
+@app.websocket('/feed')
+async def feed(request, ws):
+    while True:
+        data = 'hello!'
+        print('Sending: ' + data)
+        await ws.send(data)
+        data = await ws.recv()
+        print('Received: ' + data)
+```
+
+
+或者，可以使用app.add_websocket_route方法代替装饰器：
+
+
+```python
+async def feed(request, ws):
+    pass
+
+app.add_websocket_route(my_websocket_handler, '/feed')
+```
+调用请求的第一个参数调用WebSocket路由的处理程序，第二个参数调用WebSocket协议对象。协议对象具有send 和recv方法，分别用于发送和接收数据。
+
+WebSocket支持需要 Aymeric Augustin 的websockets软件包。
+
+
+## strict_slashes
+您可以将路由设置为严格禁止尾随斜杠，这是可配置的。
+
+```python
+# provide default strict_slashes value for all routes
+app = Sanic('test_route_strict_slash', strict_slashes=True)
+
+# you can also overwrite strict_slashes value for specific route
+@app.get('/get', strict_slashes=False)
+def handler(request):
+    return text('OK')
+
+# It also works for blueprints
+bp = Blueprint('test_bp_strict_slash', strict_slashes=True)
+
+@bp.get('/bp/get', strict_slashes=False)
+def handler(request):
+    return text('OK')
+
+app.blueprint(bp)
+```
+
+strict_slashes标志如何遵循已定义的层次结构的行为，该层次结构决定特定的路由是否属于strict_slashes行为。
+
+
+路线/
+├──蓝图/
+├──应用/
+上面的层次结构定义了strict_slashes标志的行为。 以上述顺序找到的strict_slashes的第一个非None值将应用于有问题的路由。
+
+
+```python
+from sanic import Sanic, Blueprint
+from sanic.response import text
+
+app = Sanic("sample_strict_slashes", strict_slashes=True)
+
+@app.get("/r1")
+def r1(request):
+    return text("strict_slashes is applicable from App level")
+
+@app.get("/r2", strict_slashes=False)
+def r2(request):
+    return text("strict_slashes is not applicable due to  False value set in route level")
+
+bp = Blueprint("bp", strict_slashes=False)
+
+@bp.get("/r3", strict_slashes=True)
+def r3(request):
+    return text("strict_slashes applicable from blueprint route level")
+
+bp1 = Blueprint("bp1", strict_slashes=True)
+
+@bp.get("/r4")
+def r3(request):
+    return text("strict_slashes applicable from blueprint level")
+
+```
+
+## 用户定义的路由名称
+可以通过在注册路由时传递名称参数来使用自定义路由名称，该参数将覆盖使用handler .__ name__属性生成的默认路由名称。
+
+
+```python
+app = Sanic('test_named_route')
+
+@app.get('/get', name='get_handler')
+def handler(request):
+    return text('OK')
+
+# then you need use `app.url_for('get_handler')`
+# instead of # `app.url_for('handler')`
+
+# It also works for blueprints
+bp = Blueprint('test_named_bp')
+
+@bp.get('/bp/get', name='get_handler')
+def handler(request):
+    return text('OK')
+
+app.blueprint(bp)
+
+# then you need use `app.url_for('test_named_bp.get_handler')`
+# instead of `app.url_for('test_named_bp.handler')`
+
+# different names can be used for same url with different methods
+
+@app.get('/test', name='route_test')
+def handler(request):
+    return text('OK')
+
+@app.post('/test', name='route_post')
+def handler2(request):
+    return text('OK POST')
+
+@app.put('/test', name='route_put')
+def handler3(request):
+    return text('OK PUT')
+
+# below url are the same, you can use any of them
+# '/test'
+app.url_for('route_test')
+# app.url_for('route_post')
+# app.url_for('route_put')
+
+# for same handler name with different methods
+# you need specify the name (it's url_for issue)
+@app.get('/get')
+def handler(request):
+    return text('OK')
+
+@app.post('/post', name='post_handler')
+def handler(request):
+    return text('OK')
+
+# then
+# app.url_for('handler') == '/get'
+# app.url_for('post_handler') == '/post'
+生成静态文件的
+Sanic支持使用url_for方法构建静态文件url。如果静态url指向目录，则可以忽略url_for的filename参数。q
+
+app = Sanic('test_static')
+app.static('/static', './static')
+app.static('/uploads', './uploads', name='uploads')
+app.static('/the_best.png', '/home/ubuntu/test.png', name='best_png')
+
+bp = Blueprint('bp', url_prefix='bp')
+bp.static('/static', './static')
+bp.static('/uploads', './uploads', name='uploads')
+bp.static('/the_best.png', '/home/ubuntu/test.png', name='best_png')
+app.blueprint(bp)
+
+# then build the url
+app.url_for('static', filename='file.txt') == '/static/file.txt'
+app.url_for('static', name='static', filename='file.txt') == '/static/file.txt'
+app.url_for('static', name='uploads', filename='file.txt') == '/uploads/file.txt'
+app.url_for('static', name='best_png') == '/the_best.png'
+
+# blueprint url building
+app.url_for('static', name='bp.static', filename='file.txt') == '/bp/static/file.txt'
+app.url_for('static', name='bp.uploads', filename='file.txt') == '/bp/uploads/file.txt'
+app.url_for('static', name='bp.best_png') == '/bp/static/the_best.png'
+
+```

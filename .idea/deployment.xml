@@ -1,40 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="doc">
+  <component name="PublishConfigData" autoUpload="Always" serverName="docUbuntu">
     <serverData>
-      <paths name="doc">
+      <paths name="docUbuntu">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$/website/build/docs" web="/" />
-            <mapping local="" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="hfcai@www.enjoytoday.cn:22">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="hfcai@www.enjoytoday.cn:22 (2)">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="mediaStack">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="tmpAdmin">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="" local="$PROJECT_DIR$/website/build/docs" web="/" />
           </mappings>
         </serverdata>
       </paths>

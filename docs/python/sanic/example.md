@@ -1,6 +1,7 @@
 ---
 id: example
 title: 创建一个Example
+author:胖蔡
 ---
 
 ## 创建一个main.py文件

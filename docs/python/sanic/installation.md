@@ -2,6 +2,7 @@
 id: installation
 title: 安装Sanic
 sidebar_label: 安装
+author:胖蔡
 ---
 
 ## 环境
