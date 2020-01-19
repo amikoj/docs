@@ -346,7 +346,7 @@ def r3(request):
 可以通过在注册路由时传递名称参数来使用自定义路由名称，该参数将覆盖使用handler .__ name__属性生成的默认路由名称。
 
 
-```python
+````python
 app = Sanic('test_named_route')
 
 @app.get('/get', name='get_handler')
@@ -426,4 +426,6 @@ app.url_for('static', name='bp.static', filename='file.txt') == '/bp/static/file
 app.url_for('static', name='bp.uploads', filename='file.txt') == '/bp/uploads/file.txt'
 app.url_for('static', name='bp.best_png') == '/bp/static/the_best.png'
 
-```
+````
+
+g
