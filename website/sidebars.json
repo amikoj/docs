@@ -10,7 +10,30 @@
       "python/sanic/request",
       "python/sanic/response",
       "python/sanic/cookie",
-      "python/sanic/router"
+      "python/sanic/router",
+      "python/sanic/blueprint",
+      "python/sanic/static",
+      "python/sanic/versioning",
+      "python/sanic/exception",
+      "python/sanic/middleware",
+      "python/sanic/websocket",
+      "python/sanic/decorators",
+      "python/sanic/stream",
+      "python/sanic/views"
+    ],
+    "补充": [
+      "python/sanic/protocols",
+      "python/sanic/socket",
+      "python/sanic/ssl",
+      "python/sanic/debug",
+      "python/sanic/testing",
+      "python/sanic/deploy",
+      "python/sanic/case",
+      "python/sanic/debug"
+    ],
+    "扩展": [
+      "python/sanic/extensions",
+      "python/sanic/apis"
     ]
   },
   "kotlin": {
