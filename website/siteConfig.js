@@ -52,8 +52,8 @@ const siteConfig = {
     users,
 
     /* path to images for header/footer */
-    headerIcon: 'img/favicon.ico',
-    footerIcon: 'img/favicon.ico',
+    // headerIcon: 'img/favicon.ico',
+    // footerIcon: 'img/favicon.ico',
     favicon: 'img/favicon.ico',
 
     /* Colors for website */
@@ -119,6 +119,7 @@ const siteConfig = {
     //编辑地址
     editUrl: 'https://github.com/amikoj/docs/edit/master/docs/',
     scrollToTop: true,
+    docsUrl:'',
     // You may provide arbitrary config keys to be used as needed by your
     // template. For example, if you need your repo's URL...
     //   repoUrl: 'https://github.com/facebook/test-site',
