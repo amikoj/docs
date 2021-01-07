@@ -119,9 +119,9 @@ class Footer extends React.Component {
         </a>
           <section className="copyright">
               {this.props.config.copyright}
-              <a href="http://www.beian.mitt.gov.cn/" style={{
+              <a href="http://beian.mitt.gov.cn/" style={{
                   color:'gray',
-              }}> | 皖ICP备19024802-2号 </a>
+              }}> | 皖ICP备19024802号 </a>
           </section>
 
       </footer>

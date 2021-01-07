@@ -39,13 +39,6 @@ const siteConfig = {
     headerLinks: [
         // Links to document with id doc1 for current language/version
         {doc: 'python/sanic/installation', label: 'Sanic'},
-        {doc: 'kotlin/begin', label: 'Kotlin'},
-        // {doc: 'doc1', label: 'Python'},
-        // {doc:'doc4', label:'Android'},
-        // {page: 'help', label: 'Help'},
-
-        // Links to href destination
-        {href: "http://www.enjoytoday.cn", label: "胖蔡杂谈"},
     ],
 
     // If you have users set above, you add it here:
@@ -63,7 +56,6 @@ const siteConfig = {
     },
 
     /* Custom fonts for website */
-
     fonts: {
         myFont: [
             "Times New Roman",
@@ -74,10 +66,8 @@ const siteConfig = {
             "system-ui"
         ]
     },
-
-
     // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-    copyright: `Copyright © ${new Date().getFullYear()} 胖蔡杂谈`,
+    copyright: `Copyright © ${new Date().getFullYear()} 胖蔡文档`,
 
     highlight: {
         // Highlight.js theme to use for syntax highlighting in code blocks.

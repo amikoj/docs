@@ -35,10 +35,5 @@
       "python/sanic/extensions",
       "python/sanic/apis"
     ]
-  },
-  "kotlin": {
-    "开始": [
-      "kotlin/begin"
-    ]
   }
 }
